@@ -85,9 +85,7 @@ The ResNet-based features remained strong under flipped-image testing, suggestin
 
 ## Contributions
 
-This was a collaborative computer vision project. My teammates were Amanda Chung, Caitlin Gainey, and Clara Rhoades. My main contributions focused on the classification pipeline, feature fusion experiments, model evaluation, and interpretation of results.
-
-I worked on combining HOG, LBP, and pretrained ResNet-based features into a fused representation for multiclass brain tumor MRI classification. I also helped evaluate SVM-based classifiers across handcrafted, deep, and fused feature sets, and contributed to the flipped-image robustness experiment used to assess how well the model generalized under horizontal image transformations.
+This was a collaborative computer vision project. My teammates were Amanda Chung, Caitlin Gainey, and Clara Rhoades. My contributions included work on the classification pipeline, feature fusion experiments, model evaluation, and interpretation of results.
 
 This repository is a cleaned and curated public version of the project, focused on the final modeling workflow, experiments, and results.
 
