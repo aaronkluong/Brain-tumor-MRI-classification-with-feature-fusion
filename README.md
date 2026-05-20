@@ -1,20 +1,24 @@
-# Brain Tumor MRI Classification
+# Brain Tumor MRI Classification with Feature Fusion
 
-This project builds a multiclass brain tumor MRI classifier using a combination of traditional computer vision features and deep learning-based feature extraction. The model classifies brain MRI scans into four categories: glioma, meningioma, pituitary tumor, and no tumor.
+Classifying brain MRI scans into glioma, meningioma, pituitary tumor, and no tumor using handcrafted computer vision features, pretrained ResNet embeddings, and feature fusion.
 
-The main contribution of this project is a feature fusion approach that combines handcrafted image descriptors, including HOG and LBP, with pretrained ResNet embeddings to improve classification performance.
+This project evaluates whether combining traditional image descriptors with deep visual embeddings can improve multiclass MRI classification. The final model fuses HOG, LBP, and ResNet-18 features, applies PCA for dimensionality reduction, and trains an SVM classifier on the combined representation.
 
-## Project Overview
+> This project is intended for research and educational purposes only. It is not a diagnostic tool or clinical decision-making system.
 
-Brain tumor classification from MRI scans is an important computer vision task with potential applications in clinical decision support. In this project, we compare multiple modeling approaches for MRI image classification, including:
+## Overview
 
-- A CNN baseline model
-- Handcrafted computer vision features
-- Pretrained ResNet-based feature extraction
-- Feature fusion using HOG, LBP, and ResNet embeddings
-- SVM classification on fused feature representations
+Brain tumor MRI classification is a computer vision task where both local texture and global image structure can be informative. Instead of relying on a single feature family, this project compares multiple representation strategies:
 
-The final approach uses fused feature vectors to capture complementary information from MRI scans. HOG captures edge and shape structure, LBP captures local texture patterns, and ResNet embeddings capture higher-level visual representations learned from deep neural networks.
+- **HOG features** for edge, gradient, and shape structure
+- **LBP features** for local texture patterns
+- **Pretrained ResNet-18 embeddings** for higher-level visual representations
+- **Feature fusion** to combine handcrafted and deep representations
+- **SVM and Logistic Regression classifiers** for downstream classification
+
+The strongest model used fused HOG + LBP + ResNet-18 features with an SVM classifier.
+
+![Sample MRI Images](images/sample_grid.png)
 
 ## Dataset
 
@@ -29,76 +33,138 @@ The full dataset is not included in this repository due to size constraints. To 
 
 ## Methods
 
-### 1. Preprocessing
+### Exploratory Data Analysis
 
-Images were loaded, resized, and normalized before feature extraction and modeling. The project also includes exploratory analysis of image dimensions, class distributions, and sample MRI scans.
+The exploratory analysis checked class composition, duplicate images, image resolution variation, pixel intensity patterns, and sample images across tumor classes. This helped identify preprocessing needs before feature extraction and modeling.
 
-### 2. CNN Baseline
+### Feature Extraction
 
-A convolutional neural network baseline was trained to establish a deep learning benchmark for the classification task.
+The modeling pipeline used three complementary feature types:
 
-### 3. Handcrafted Features
+| Feature Type | Purpose |
+|---|---|
+| HOG | Captures edges, gradients, and shape structure |
+| LBP | Captures local texture patterns |
+| ResNet-18 embeddings | Captures higher-level visual representations from a pretrained CNN |
 
-Two traditional computer vision feature extractors were used:
+![Feature Extraction Examples](images/feature_examples_hog_lbp_resnet.png)
 
-- **HOG (Histogram of Oriented Gradients):** captures edge direction and shape structure
-- **LBP (Local Binary Patterns):** captures local texture information
+### Feature Fusion
 
-These features provide interpretable representations of MRI image patterns.
+The core contribution of this project is the fusion of handcrafted and deep features. HOG and LBP provide interpretable low-level image descriptors, while ResNet-18 embeddings capture broader spatial and semantic patterns. Combining them allows the model to use complementary information from the MRI scans.
 
-### 4. Deep Feature Extraction
+After feature extraction, PCA was applied to reduce dimensionality before training downstream classifiers.
 
-A pretrained ResNet model was used as a fixed feature extractor. Instead of training a deep network from scratch, image embeddings were extracted from the pretrained model and used for downstream classification.
+### Modeling
 
-### 5. Feature Fusion
+The project compared several model configurations:
 
-The strongest model combined HOG, LBP, and ResNet features into a single fused feature vector. An SVM classifier was then trained on the fused representation.
+- CNN baseline
+- HOG-only models
+- LBP-only models
+- ResNet-18 embedding models
+- HOG + LBP feature fusion
+- HOG + LBP + ResNet-18 feature fusion
 
-This approach allowed the model to benefit from both handcrafted image descriptors and deep visual embeddings.
+The final best-performing configuration was:
+
+```text
+HOG + LBP + ResNet-18 features
+PCA with 100 components
+SVM classifier
+```
 
 ## Results
 
 The feature fusion model achieved the strongest overall performance.
 
-| Model / Approach | Summary |
-|---|---|
-| CNN baseline | Used as a deep learning benchmark |
-| HOG features | Captured shape and edge information |
-| LBP features | Captured local texture patterns |
-| ResNet features | Captured high-level deep visual representations |
-| HOG + LBP + ResNet fusion | Best-performing approach |
+| Model | Validation Accuracy | Test Accuracy |
+|---|---:|---:|
+| CNN baseline | N/A | 84.66% |
+| ResNet-18 + SVM | N/A | 92.00% |
+| HOG + LBP + ResNet-18 + SVM | 96.13% | 93.37% |
 
-Final performance:
+![Model Comparison](images/model_comparison_accuracy_efficiency.png)
 
-| Metric | Score |
-|---|---:|
-| Validation Accuracy | 96.13% |
-| Test Accuracy | 93.37% |
+The final feature fusion model reached **93.37% test accuracy**, outperforming the CNN baseline and standalone ResNet comparison. These results suggest that handcrafted image features and pretrained deep embeddings can provide complementary signal for MRI classification.
 
-The results suggest that combining handcrafted and deep learning features can improve classification performance by capturing complementary information from MRI scans.
+![Final Confusion Matrices](images/final_confusion_matrices.png)
 
-## Flipped Image Experiment
+## Flipped Image Robustness Experiment
 
-An additional experiment evaluated model robustness by testing performance on horizontally flipped MRI images. This tested whether the model relied heavily on orientation-specific features or whether it could still classify tumors using broader visual patterns.
+An additional experiment tested model robustness on horizontally flipped MRI scans. This helped evaluate whether performance depended heavily on orientation-specific features or whether the model captured broader image patterns.
 
-The ResNet-based features remained strong under flipped-image testing, suggesting that the model captured global image context and higher-level representations beyond only local edge or texture patterns.
+The ResNet-based features remained strong under flipped-image testing, suggesting that the model captured global context and higher-level visual representations beyond only local edge or texture features.
 
-## Contributions
+## Key Takeaways
 
-This was a collaborative computer vision project. My teammates were Amanda Chung, Caitlin Gainey, and Clara Rhoades. My contributions included work on the classification pipeline, feature fusion experiments, model evaluation, and interpretation of results.
+- Feature fusion improved performance over simpler baselines.
+- HOG captured edge and shape information, while LBP captured texture.
+- ResNet-18 embeddings contributed higher-level visual representations.
+- The fused HOG + LBP + ResNet-18 representation performed best with an SVM classifier.
+- The flipped-image experiment suggested that ResNet features captured broader image context beyond orientation-specific patterns.
+- This project is useful as a computer vision portfolio project because it compares interpretable handcrafted features against deep feature extraction.
 
-This repository is a cleaned and curated public version of the project, focused on the final modeling workflow, experiments, and results.
+## Limitations and Future Work
+
+The project demonstrates strong classification performance, but it should be interpreted as an image classification experiment rather than a clinically deployable diagnostic system.
+
+Important limitations include:
+
+- The model was trained on a public MRI image dataset rather than a prospectively collected clinical dataset.
+- The project performs image-level classification, not tumor segmentation or localization.
+- The model does not incorporate radiologist annotations, clinical history, scanner metadata, or patient-level context.
+- Dataset artifacts, preprocessing differences, and duplicate images can affect performance estimates.
+- The final model predicts tumor class but does not explain spatial tumor boundaries.
+
+Future work could extend the project in several directions:
+
+- **Segmentation-aware modeling:** Add tumor localization or segmentation masks to evaluate whether the model focuses on clinically relevant regions.
+- **External validation:** Test the model on MRI scans from a different institution or dataset to evaluate generalization.
+- **Fine-tuned CNNs:** Fine-tune ResNet, EfficientNet, or Vision Transformer models end-to-end instead of using fixed embeddings only.
+- **Explainability:** Use Grad-CAM or saliency maps to visualize which image regions influence predictions.
+- **Patient-level splitting:** Ensure train/test separation at the patient level if patient identifiers are available.
+- **Metadata integration:** Incorporate scanner type, imaging sequence, age, sex, or other clinical variables when available.
+- **Calibration:** Evaluate whether predicted probabilities are well-calibrated for risk-aware interpretation.
 
 ## Repository Structure
 
 ```text
-Brain_Tumor_Classification/
+Brain-tumor-MRI-classification-with-feature-fusion/
 ├── README.md
-├── .gitignore
+├── EDA.ipynb
+├── cnn_baseline.ipynb
 ├── final_classification_model.ipynb
 ├── flipped_test_experiment.ipynb
-├── cnn_baseline.ipynb
 ├── resnet_comparison.ipynb
-├── exploratory_data_analysis.ipynb
 ├── final_report.pdf
 └── images/
+    ├── sample_grid.png
+    ├── feature_examples_hog_lbp_resnet.png
+    ├── model_comparison_accuracy_efficiency.png
+    ├── final_confusion_matrices.png
+    ├── flipped_robustness_accuracy_efficiency.png
+    └── resnet_pca_tsne_visualization.png
+```
+
+## How to Run
+
+The dataset is not included in this repository. To reproduce the project:
+
+1. Download the Brain Tumor MRI Dataset from Kaggle.
+2. Place the data in the expected local directory.
+3. Run `EDA.ipynb` to inspect the dataset and preprocessing steps.
+4. Run `cnn_baseline.ipynb` for the baseline CNN model.
+5. Run `resnet_comparison.ipynb` for pretrained ResNet feature extraction experiments.
+6. Run `final_classification_model.ipynb` for the feature fusion pipeline.
+7. Run `flipped_test_experiment.ipynb` to evaluate robustness on horizontally flipped test images.
+
+## Contributors
+
+This was a collaborative computer vision project with Amanda Chung, Caitlin Gainey, and Clara Rhoades.
+
+My contributions included work on the classification pipeline, feature fusion experiments, model evaluation, robustness testing, and interpretation of results.
+
+## Disclaimer
+
+This project is for research and educational purposes only. It is not intended for diagnosis, treatment decisions, clinical deployment, or real-time medical decision support.
