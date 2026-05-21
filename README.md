@@ -129,6 +129,8 @@ Future work could extend the project in several directions:
 
 ## Repository Structure
 
+## Repository Structure
+
 ```text
 Brain-tumor-MRI-classification-with-feature-fusion/
 ├── README.md
@@ -139,12 +141,24 @@ Brain-tumor-MRI-classification-with-feature-fusion/
 ├── resnet_comparison.ipynb
 ├── final_report.pdf
 └── images/
-    ├── sample_grid.png
+    ├── duplicates_by_class.png
     ├── feature_examples_hog_lbp_resnet.png
-    ├── model_comparison_accuracy_efficiency.png
+    ├── fig_color_barchart.png
+    ├── fig_color_example.png
     ├── final_confusion_matrices.png
     ├── flipped_robustness_accuracy_efficiency.png
-    └── resnet_pca_tsne_visualization.png
+    ├── model_comparison_accuracy_efficiency.png
+    ├── option1_step.png
+    ├── option2_reordered.png
+    ├── option3_mixed.png
+    ├── resnet_pca_tsne_visualization.png
+    ├── resolution_2x2.png
+    ├── resolution_by_class.png
+    ├── sample_grid.png
+    ├── sample_grid_glioma.png
+    ├── sample_grid_meningioma.png
+    ├── sample_grid_notumor.png
+    └── sample_grid_pituitary.png
 ```
 
 ## How to Run
