@@ -161,24 +161,8 @@ Brain-tumor-MRI-classification-with-feature-fusion/
     └── sample_grid_pituitary.png
 ```
 
-## How to Run
-
-The dataset is not included in this repository. To reproduce the project:
-
-1. Download the Brain Tumor MRI Dataset from Kaggle.
-2. Place the data in the expected local directory.
-3. Run `EDA.ipynb` to inspect the dataset and preprocessing steps.
-4. Run `cnn_baseline.ipynb` for the baseline CNN model.
-5. Run `resnet_comparison.ipynb` for pretrained ResNet feature extraction experiments.
-6. Run `final_classification_model.ipynb` for the feature fusion pipeline.
-7. Run `flipped_test_experiment.ipynb` to evaluate robustness on horizontally flipped test images.
-
 ## Contributors
 
 This was a collaborative computer vision project with Amanda Chung, Caitlin Gainey, and Clara Rhoades.
 
 My contributions included work on the classification pipeline, feature fusion experiments, model evaluation, robustness testing, and interpretation of results.
-
-## Disclaimer
-
-This project is for research and educational purposes only. It is not intended for diagnosis, treatment decisions, clinical deployment, or real-time medical decision support.
